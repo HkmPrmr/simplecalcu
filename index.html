@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculater</title>
+    <style>
+        * {
+            margin: 3px;
+            padding: 0 ;
+            box-sizing: border-box;
+        }
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #4c634d;
+        }
+        .calc{
+            display: grid;
+            grid-template-columns: repeat(4 , 80px) ;
+        }
+        input{
+            grid-column: span 4;
+            height: 50px;
+            padding: 0 8px;
+            font-size: 18px ;
+
+
+        }
+        button{ 
+            font-size: 20px;
+            padding: 6px;
+            background-color: #12d0d6;
+            border: none;
+        }
+        button:active{
+            background-color: blue;
+            
+        }
+        
+
+    </style>
+</head>
+<body>
+    <div class="calc">
+
+
+        <input type="text" id="calcscreen" placeholder="0" onfocus="this.blur();"  >
+        <button onclick="Calc('+'); change('+');" class="bn_style"  style="background-color: #085988;">+</button>
+        <button onclick="Calc('-'); change('-');" class="bn_style" style="background-color: #085988;">-</button>
+        <button onclick="Calc('*'); change('*');" class="bn_style"style="background-color: #085988;" >*</button>
+        <button onclick="Calc('/'); change('/');" class="bn_style" style="background-color: #085988;">/</button>
+
+        <button onclick="Calc('7');" class="bn_style">7</button>
+        <button onclick="Calc('8');" class="bn_style">8</button>
+        <button onclick="Calc('9');" class="bn_style">9</button>
+        <button onclick="Del();" class="bn_style" style="background-color: #076366;">Del</button>
+
+        <button onclick="Calc('4');" class="bn_style">4</button>
+        <button onclick="Calc('5');" class="bn_style">5</button>
+        <button onclick="Calc('6');" class="bn_style">6</button>
+        <button onclick="Ans();" class="bn_style" style="background-color: #076366;">Ans</button>
+
+        <button onclick="Calc('1');" class="bn_style">1</button>
+        <button onclick="Calc('2');" class="bn_style">2</button>
+        <button onclick="Calc('3');" class="bn_style">3</button>
+        <button onclick="Display();" class="bn_style"  style="grid-row: span 2; background-color: #04459b;">=</button>
+
+        <button onclick="Calc('0');" class="bn_style">0</button>
+        <button onclick="Calc('.'); change('.');" class="bn_style">.</button>
+        <button onclick="Clear();" class="bn_style" style="background-color: #076366;">C</button>
+
+        
+    </div>
+    <div id="show"></div>
+    <script>
+        var output=document.getElementById("calcscreen");
+       /* var st="44.5.3"
+        var str="44/.*55-+"
+        console.log(str.search(/\./))
+        console.log(str.search(/\D{5,}/))*/
+       // console.log(eval(7/0));
+      /* var a=[1,"ahmad"];
+       aa=a.indexOf("hmad");
+       console.log(aa);*/
+      // console.log(Date());
+
+        function change(num) {
+            
+            if ( output.value.search(/\D{2,}/)!= -1) {
+                output.value=output.value.slice(0,-1);
+            }
+             if (output.value.search(/\d{1,}\.\d{1,}\./)!=-1) {
+                output.value=output.value.slice(0,-1);
+            }
+           
+            /*let point=output.value.search(/ \. /);
+            let op=output.value.search(/ [/*-+] /);*/
+
+        }
+
+        function Calc(num) {
+                if(( num =='/' || num == '*' || num == '-' || num== '+') && output.value=='')
+                {
+                    output.value= '0'+ num;
+                }
+                else if(output.value=="U can't divide by ZERO")
+                {
+                    if ((num == '.' || num =='/' || num == '*' || num == '-' || num== '+')) {
+                        output.value='';
+                    output.value='0'+num;
+                    }
+                   else{ output.value='';
+                    output.value+=num;}
+                }
+                else if (output.value==f_re && !(num == '.' || num =='/' || num == '*' || num == '-' || num== '+') ) {
+                    output.value='';
+                    output.value+=num;
+                }
+                  else  output.value += num;
+                if (num=='/' || num=='*' || num=='-' || num=='+' ) {
+                    ans_ac=0;
+                }
+
+            
+        }
+
+        function Clear() {
+            output.value='';
+
+            ans_ac=0;
+        }
+
+        function Del() {
+            if(output.value=="Infinity" ||output.value=="U can't divide by ZERO" || output.value=="undefined" )
+            {
+                output.value='';
+            }
+            
+           else output.value = output.value.slice(0,-1);
+        }
+        var f_re;
+        var f_re_un;
+        var whole_op;
+        var ans_ac;
+       var whole_op_arr=[];
+       
+        function Display() {
+            if(eval(output.value)=="Infinity" || output.value=="0/0")
+            {
+                
+                output.value="U can't divide by ZERO";
+                
+            }
+
+            else if (output.value=='') {
+                
+            }
+
+            else 
+            { 
+                whole_op=output.value+'='+eval(output.value);
+                output.value = eval(output.value);
+                Add_time(whole_op);
+            }
+
+            
+            f_re=eval(output.value);
+            ans_ac=0;
+
+            
+        }
+        function Add_time(ss){
+            
+
+            if (whole_op_arr.indexOf(ss) == -1) {
+                whole_op_arr.push(ss);
+            }
+
+            let hkm="<table border='border' style='background-color: rgb(14, 190, 190); border-color: black;' > <tr><th>The Whole Operation</th> <th>The Time</th></tr>";
+            for (let i = 0; i < whole_op_arr.length; i++)
+            {
+                hkm+="<tr><td>"+whole_op_arr[i]+"</td><td>"+Date()+"</td></tr>";
+            }
+            hkm+="</table>";
+            document.getElementById("show").innerHTML=hkm;
+        }
+
+        function Ans()
+        {
+            ans_ac++;
+            //var ff=toString(f_re);
+            if(ans_ac <= 1 && output.value!=String(f_re) && output.value!="U can't divide by ZERO")
+            {
+                if(String(f_re) != "undefined" )
+                {
+                    output.value+=f_re;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
